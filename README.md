@@ -54,6 +54,8 @@ services:
 
 These labels must be declared in every container which should be exposed to the outside world. We want to show the traefik interface at traefik.example.com, therefore these labels have to be here.
 
+In basic auth, it is **important** that you escape each $ with another $!
+
 
 
 ```yaml
