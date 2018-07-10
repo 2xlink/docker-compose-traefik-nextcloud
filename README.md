@@ -104,4 +104,5 @@ We need to set the traefik.port to 80. Most guides define a port mapping from 80
 ## Troubleshooting
 
 If you want to troubleshoot a container, start it with `docker-compose up` (without the `-d` option).
+
 If your subdomain.example.com throws an HTTPS certificate error due to it being self-signed, it could be because Traefik tries to get the certificate but is not fast enough. Sometimes it helps to just wait a few minutes.
