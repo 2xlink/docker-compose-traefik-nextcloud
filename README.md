@@ -4,15 +4,15 @@ Another guide to set up a nextcloud with docker-compose and traefik as a reverse
 
 ## Why?
 
-Because the guides I found during my installation process were lacking in explanation or outdated, or both.
+Because the guides I found during my installation process were lacking in explanation or outdated. Or both.
 
 ## What's the goal?
 
 We want a self-hosted server, using containered services and a modularized docking system, where containers can easily be added on-the-fly without much maintenance. We also want Letsencrypt certs for all our subdomains.
-
+f
 ## How do we do it?
 
-Well, obviously with Docker, Traefik and Nextcloud ;-). With Docker we will get containers, Docker-compose is a service which helps us to configure many Docker instances at once. Traefik is a reverse-proxy which will handle the routing to our containers and additionally will manage Letsencrypt certs for us. Nextcloud is a service, which manages your files, calenders, contacts etc. I chose Nextcloud for my needs, but it can be run along or be replaced by your containers.
+Well, obviously with Docker, Traefik and Nextcloud ;-). With Docker we will get containers, Docker-compose is a service which helps us to configure many Docker instances at once. Traefik is a reverse-proxy which will handle the routing to our containers and additionally will manage Letsencrypt certs for us. Nextcloud is a service which manages your files, calenders, contacts etc. I chose Nextcloud for my needs, but it can be run along or be replaced by your containers.
 
 ## Okay, lets go!
 
