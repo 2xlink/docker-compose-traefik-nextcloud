@@ -1,0 +1,37 @@
+debug = false
+logLevel = "ERROR"
+
+defaultEntryPoints = ["http", "https"]
+
+[web]
+# Port for the status page
+address = ":8080"
+
+[entryPoints]
+    [entryPoints.http]
+    address = ":80"
+        [entryPoints.http.redirect]
+        entryPoint = "https"
+
+    [entryPoints.https]
+    address = ":443"
+    [entryPoints.https.tls]
+
+[retry]
+
+[docker]
+endpoint = "unix:///var/run/docker.sock"
+domain = "example.com"
+watch = true
+exposedByDefault = false
+
+[acme]
+email = "admin@example.com"
+storage = "acme.json"
+entryPoint = "https"
+# onDemand = true
+onHostRule = true
+
+[acme.httpChallenge]
+entryPoint = "http"
+

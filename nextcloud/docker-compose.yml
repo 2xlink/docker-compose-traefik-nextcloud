@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    volumes:
+      - db:/var/lib/postgresql/data
+    env_file:
+      - db.env
+    networks:
+      - default
+
+  app:  
+    image: nextcloud:apache
+    restart: always
+    volumes:
+      - nextcloud:/var/www/html
+    env_file:
+      - db.env
+    depends_on:
+      - db
+    networks:
+      - web
+      - default
+    labels:
+      - "traefik.backend=nextcloud"
+      - "traefik.docker.network=web"
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:nc.example.com"
+      - "traefik.port=80"
+
+networks:
+  web:
+    external: true
+
+volumes:
+  db:
+  nextcloud:
