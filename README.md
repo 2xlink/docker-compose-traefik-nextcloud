@@ -8,7 +8,7 @@ Because the guides I found during my installation process were lacking in explan
 
 ## What's the goal?
 
-We want a self-hosted server, using containered services and a modularized docking system, where containers can easily be added on-the-fly without much maintainance. We also want Letsencrypt certs for all our subdomains.
+We want a self-hosted server, using containered services and a modularized docking system, where containers can easily be added on-the-fly without much maintenance. We also want Letsencrypt certs for all our subdomains.
 
 ## How do we do it?
 
