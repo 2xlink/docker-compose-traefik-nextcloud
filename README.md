@@ -29,6 +29,9 @@ Let's look at traefik first:
 #### docker-compose.yaml
 
 ```yaml
+services:
+  traefik:
+    […]
     networks:
       - web
 ```
@@ -38,6 +41,9 @@ This has to be in every service which should be exposed to the outside world.
 
 
 ```yaml
+services:
+  traefik:
+    […]
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=web"
@@ -51,6 +57,7 @@ These labels must be declared in every container which should be exposed to the 
 
 
 ```yaml
+[…]
 networks:
   web:
     external: true
