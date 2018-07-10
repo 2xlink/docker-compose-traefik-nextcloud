@@ -37,7 +37,7 @@ This has to be in every service which should be exposed to the outside world.
 
 
 
-```toml
+```yaml
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=web"
@@ -50,7 +50,7 @@ These labels must be declared in every container which should be exposed to the 
 
 
 
-```toml
+```yaml
 networks:
   web:
     external: true
@@ -62,7 +62,7 @@ Declares that the network `web` is exposed.
 
 #### docker-compose.yaml
 
-```toml
+```yaml
 services:
   db:
     […]
@@ -80,7 +80,7 @@ This is really important. You need to define a network for you DB and your app s
 
 
 
-```toml
+```yaml
     […]
     labels:
       - "traefik.backend=nextcloud"
