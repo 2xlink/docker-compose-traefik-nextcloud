@@ -1,3 +1,5 @@
+[TOC]
+
 # Docker-compose + Traefik + Nextcloud
 
 Another guide to set up a nextcloud with docker-compose and traefik as a reverse-proxy. 
@@ -9,7 +11,7 @@ Because the guides I found during my installation process were lacking in explan
 ## What's the goal?
 
 We want a self-hosted server, using containered services and a modularized docking system, where containers can easily be added on-the-fly without much maintenance. We also want Letsencrypt certs for all our subdomains.
-f
+
 ## How do we do it?
 
 Well, obviously with Docker, Traefik and Nextcloud ;-). With Docker we will get containers, Docker-compose is a service which helps us to configure many Docker instances at once. Traefik is a reverse-proxy which will handle the routing to our containers and additionally will manage Letsencrypt certs for us. Nextcloud is a service which manages your files, calenders, contacts etc. I chose Nextcloud for my needs, but it can be run along or be replaced by your containers.
@@ -100,6 +102,52 @@ This is really important. You need to define a network for you DB and your app s
 ```
 
 We need to set the traefik.port to 80. Most guides define a port mapping from 8080 (on the host) to 80 (on the container) so they can access the service on localhost:8080. We need to choose port 80 though, as traefik directly communicates with the service within the container, and nextcloud internally exposes port 80.
+
+#### Adding Redis
+
+Redis is a cache server, which will improve your web interface experience.
+
+Just add Redis to your docker-compose:
+
+```yaml
+  redis:
+    image: redis
+    container_name: redis
+    volumes:
+      - /docker/nextcloud/redis:/data
+    networks:
+      - internal
+```
+
+We still need to point nextcloud to redis. This is done in `config/config.php` (in the container). We will configure the config from outside and load it in when we create the container:
+
+```bash
+# On the host system
+mkdir -p nextcloud/config
+vim nextcloud/config/config.php
+# Add your config here. You can also just copy your current config from the container.
+# Then add redis at the end
+<?php
+[…]
+'redis' => array(
+      'host' => 'redis',
+      'port' => 6379,
+       ),
+);
+```
+
+Then adjust your docker-compose to point to your config:
+
+```yaml
+services:
+  app:
+    volumes:
+      - nextcloud:/var/www/html # Pulls from /var/lib/docker/volumes/nextcloud_nextcloud/_data/
+      - ./nextcloud/config:/var/www/html/config # Pulls from local dir
+      - /mnt/someHDD/nextcloud:/mnt/hdd # Pulls from root
+```
+
+You might need to adjust the owner of the config dir in your container, or nextcloud can not write to it.
 
 ## Troubleshooting
 

@@ -9,28 +9,39 @@ services:
     env_file:
       - db.env
     networks:
-      - default
+      - internal
 
-  app:  
-    image: nextcloud:apache
+  app:
+    image: nextcloud:latest
     restart: always
     volumes:
-      - nextcloud:/var/www/html
+      - nextcloud:/var/www/html # Pulls from /var/lib/docker/volumes/nextcloud_nextcloud/_data/
+      - ./nextcloud/config:/var/www/html/config # Pulls from local dir
+      - /mnt/someHDD/nextcloud:/mnt/hdd # Pulls from root
     env_file:
       - db.env
     depends_on:
       - db
     networks:
       - web
-      - default
+      - internal
     labels:
       - "traefik.backend=nextcloud"
       - "traefik.docker.network=web"
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:nc.example.com"
+      - "traefik.frontend.rule=Host:nc.kumula.me"
       - "traefik.port=80"
 
+  redis:
+    image: redis
+    container_name: redis
+    volumes:
+      - /docker/nextcloud/redis:/data
+    networks:
+      - internal
+
 networks:
+  internal:
   web:
     external: true
 
