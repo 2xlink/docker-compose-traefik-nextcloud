@@ -20,7 +20,7 @@ Well, obviously with Docker, Traefik and Nextcloud ;-). With Docker we will get 
 
 This assumes that you already have [Docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-using-the-repository) and [Docker-compose](https://docs.docker.com/compose/install/) installed.
 
-In this repository there are currently 2 directories. One contains the docker-compose contents for nextcloud, and one for traefik. Each one contains a `docker-compose.yaml`, which defines how docker-compose should handle the containers. 
+In this repository there are currently 2 directories. One contains the docker-compose contents for nextcloud, and one for traefik. Each one contains a `docker-compose.yml`, which defines how docker-compose should handle the containers. 
 
 I will not explain what every option in the files does. I just want to warn you of some pitfalls and maybe unintuitive configurations.
 
@@ -28,9 +28,9 @@ Let's look at traefik first:
 
 ### Traefik
 
-#### docker-compose.yaml
+#### docker-compose.yml
 
-```yaml
+```yml
 services:
   traefik:
     […]
@@ -38,11 +38,10 @@ services:
       - web
 ```
 
-This has to be in every service which should be exposed to the outside world.
+We chose the network `web` to determine services which should be exposed to the outside world. You have to initially create it using `docker network create web`.
 
 
-
-```yaml
+```yml
 services:
   traefik:
     […]
@@ -60,38 +59,38 @@ In basic auth, it is **important** that you escape each $ with another $!
 
 
 
-```yaml
+```yml
 […]
 networks:
   web:
     external: true
 ```
 
-Declares that the network `web` is exposed.
+Declares that the network `web` is external.
 
 ### Nextcloud
 
-#### docker-compose.yaml
+#### docker-compose.yml
 
-```yaml
+```yml
 services:
   db:
     […]
     networks:
-      - default
+      - internal
 
 app:
     […]
     networks:
       - web
-      - default
+      - internal
 ```
 
-This is really important. You need to define a network for you DB and your app so they can see each other. In this case I named the network "default".
+This is really important. You need to define a network for you DB and your app so they can see each other. In this case I named the network `internal`.
 
 
 
-```yaml
+```yml
     […]
     labels:
       - "traefik.backend=nextcloud"
@@ -101,15 +100,15 @@ This is really important. You need to define a network for you DB and your app s
       - "traefik.port=80"
 ```
 
-We need to set the traefik.port to 80. Most guides define a port mapping from 8080 (on the host) to 80 (on the container) so they can access the service on localhost:8080. We need to choose port 80 though, as traefik directly communicates with the service within the container, and nextcloud internally exposes port 80.
+Most guides define a port mapping from 8080 (on the host) to 80 (on the container) so they can access the service on localhost:8080. In the case of using traefik we need to choose port 80, as traefik directly communicates with the service within the container, and nextcloud internally exposes port 80.
 
 #### Adding Redis
 
-Redis is a cache server, which will improve your web interface experience.
+Redis is a cache server, which will improve your web interface experience. This increases performance, but can be skipped.
 
 Just add Redis to your docker-compose:
 
-```yaml
+```yml
   redis:
     image: redis
     container_name: redis
@@ -138,7 +137,7 @@ vim nextcloud/config/config.php
 
 Then adjust your docker-compose to point to your config:
 
-```yaml
+```yml
 services:
   app:
     volumes:
