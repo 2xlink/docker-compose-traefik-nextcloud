@@ -79,7 +79,7 @@ services:
     networks:
       - internal
 
-app:
+  app:
     […]
     networks:
       - web
