@@ -146,7 +146,7 @@ services:
       - /mnt/someHDD/nextcloud:/mnt/hdd # Pulls from root
 ```
 
-You might need to adjust the owner of the config dir in your container, or nextcloud can not write to it.
+You might need to adjust the owner of the config dir in your container, else nextcloud can not write to it.
 
 ## Troubleshooting
 
